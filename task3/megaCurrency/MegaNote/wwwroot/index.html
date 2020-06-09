@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+
+    <title>Currency report</title>
+</head>
+<body>
+    <div id="app" class="container">
+        <h1>Currency report</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Type</th>
+                    <th>Early Value</th>
+                    <th>Late Value</th>
+                    <th>Min Value</th>
+                    <th>Max Value</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr v-for="item in reportItems" :key="item.from">
+                    <td>{{new Date(item.from).toLocaleString()}}</td>
+                    <td>{{new Date(item.to).toLocaleString()}}</td>
+                    <td v-if="item.currencyType == 1">USD</td>
+                    <td v-else>EUR</td>
+                    <td>{{item.earlyValue}}</td>
+                    <td>{{item.lateValue}}</td>
+                    <td>{{item.minValue}}</td>
+                    <td>{{item.maxValue}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+
+    </div>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    reportItems: []
+                }
+            },
+            mounted() {
+                fetch(`api/v1/reports/currency`)
+                    .then(response => response.json())
+                    .then(json => {
+                        this.reportItems = json;
+                        console.log(this.reportItems)
+                    });
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+
+
+    <title>MegaNote</title>
+</head>
+<body>
+    <div class="container">
+        <h1>New Note</h1>
+        <div class="row">
+            <form id="noteForm" class="col s12">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input placeholder="Alex Chelyadinov" id="fullName" name="fullName" type="text" class="validate" required>
+                        <label for="fullName">Full Name</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input placeholder="+79293731963" id="phone" name="phone" type="text" class="validate" pattern="[\+]\d{1}\s[\(]\d{3}[\)]\s\d{3}[\-]\d{2}[\-]\d{2}|[+ 0-9]{12}">
+                        <label for="phone">Phone</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input placeholder="artma.gronsky@gmail.com" id="email" name="email" type="email" class="validate">
+                        <label for="email">Email</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <label>Browser Select</label>
+                    <select id="city" name="city" class="browser-default">
+                        <option value="" disabled selected>Choose city</option>
+                        <option value="Tomsk">Tomsk</option>
+                        <option value="Novosibirsk">Novosibirsk</option>
+                        <option value="Saint Petersburg">Saint Petersburg</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <button class="btn waves-effect waves-light" type="submit">
+                        Submit
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            $('#noteForm').on('submit', function (e) {
+
+                e.preventDefault();
+                var serializeArray = $('#noteForm').serializeArray();
+
+                var formData = {};
+
+                serializeArray.forEach(item => {
+                    if (item.value) {
+                        formData[item.name] = item.value;
+                    }
+                });
+
+                $.ajax({
+                    type: 'post',
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    url: '/api/v1/notes',
+                    data: JSON.stringify(formData),
+                    success: function () {
+                        alert('Note was created');
+                        location.reload(false)
+                    }
+                });
+
+            });
+
+        });
+    </script>
+</body>
+</html>
